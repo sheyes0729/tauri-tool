@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 	import { getAssetsUrl } from '@/lib/utils/assetsUrl'
+	import { Windows } from '@/lib/utils/windows'
 	import { onBeforeUnmount, onMounted } from 'vue'
 	defineOptions({
 		name: 'HomeView',
@@ -67,12 +68,29 @@
 		pointer = null
 		homtItems = null
 	})
+
+	const createAboutWin = async () => {
+		new Windows().createWin({
+			label: 'About',
+			title: '关于',
+			url: '/#/about',
+			width: 500,
+			height: 500,
+			resizable: false,
+			alwaysOnTop: false,
+		})
+	}
+
+	function onItemClick(item: HomtItemInterface) {
+		console.log(item)
+		createAboutWin()
+	}
 </script>
 
 <template>
 	<div class="home-wrapper">
 		<div class="pointer"></div>
-		<div class="home-item" v-for="item in itemList">
+		<div class="home-item" v-for="item in itemList" @click="onItemClick(item)">
 			<div class="item-icon">
 				<img :src="item.icon" alt="" class="item-icon--inner" />
 			</div>
@@ -131,6 +149,7 @@
 			--x: 0;
 			--y: 0;
 			position: absolute;
+			pointer-events: none;
 			width: calc(var(--w) + var(--g) * 2);
 			height: calc(var(--h) + var(--g) * 2);
 			left: 0;
