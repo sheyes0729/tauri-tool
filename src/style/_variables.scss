@@ -1,0 +1,39 @@
+:root {
+  // 颜色
+  --color-bg: #ffffff;
+  --color-nav-hover: #f6f6f7;
+  --color-primary: var(--el-color-primary);
+  --color-title: darken(--color-title-active, 20%);
+  --color-title-active: #373737;
+  --color-subtitle: #9f9f9f;
+  --color-text: #666666;
+  --color-sub-text: #999999;
+  --color-icon: #292929;
+  --color-header-icon: #efefef;
+  --color-icon-disable: var(--el-color-primary-light-3);
+  --color-icon-bg: var(--el-color-primary-light-1);
+  --color-border: #ddd;
+  --color-mask: rgba(0,0,0,.3);
+
+  // 间距
+  --padding-default: 16px;
+  --padding-small: 8px;
+  --padding-mini: 4px;
+  --padding-large: 24px;
+
+  // 圆角
+  --radius-default: 8px;
+  --radius-small: 4px;
+  --radius-large: 12px;
+
+  // 字体大小
+  --font-default: 14px;
+  --font-small: 12px;
+  --font-large: 16px;
+  --font-extra-large: 18px;
+
+  // 字重
+  --font-weight-550: 550;
+  --font-weight-600: 600;
+  --font-weight-650: 650;
+}

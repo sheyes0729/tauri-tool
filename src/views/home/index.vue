@@ -1,0 +1,146 @@
+<script lang="ts" setup>
+	import { getAssetsUrl } from '@/lib/utils/assetsUrl'
+	import { onBeforeUnmount, onMounted } from 'vue'
+	defineOptions({
+		name: 'HomeView',
+	})
+
+	export interface HomtItemInterface {
+		title: string
+		icon: string
+	}
+
+	const itemList: Array<HomtItemInterface> = [
+		{
+			title: '表格数据转换',
+			icon: getAssetsUrl('img/excel-icon.png'),
+		},
+		{
+			title: 'Markdown编辑',
+			icon: getAssetsUrl('img/markdown-icon.png'),
+		},
+		{
+			title: '坐标转换',
+			icon: getAssetsUrl('img/coordinates-icon.png'),
+		},
+		{
+			title: '设置',
+			icon: getAssetsUrl('img/settings-icon.png'),
+		},
+	]
+
+	let pointer: null | HTMLElement = null
+	// eslint-disable-next-line no-undef
+	let homtItems: null | NodeListOf<HTMLElement> = null
+
+	function handleMouseEnter(e: MouseEvent) {
+		if (!pointer) return
+		const dom = e.target as HTMLElement
+		pointer.style.setProperty('--w', `${dom.clientWidth}px`)
+		pointer.style.setProperty('--h', `${dom.clientHeight}px`)
+		pointer.style.setProperty('--x', `${dom.offsetLeft}px`)
+		pointer.style.setProperty('--y', `${dom.offsetTop}px`)
+		pointer.style.display = 'block'
+	}
+
+	function handleWindowResize() {
+		pointer && (pointer.style.display = 'none')
+	}
+
+	onMounted(() => {
+		// eslint-disable-next-line no-undef
+		homtItems = document.querySelectorAll('.home-item > .item-icon') as NodeListOf<HTMLElement>
+		pointer = document.querySelector('.pointer') as HTMLElement
+		homtItems.forEach((item) => {
+			item.addEventListener('mouseenter', handleMouseEnter)
+		})
+
+		window.addEventListener('resize', handleWindowResize)
+	})
+
+	onBeforeUnmount(() => {
+		window.removeEventListener('resize', handleWindowResize)
+		homtItems &&
+			homtItems.forEach((item) => {
+				item.removeEventListener('mouseenter', handleMouseEnter)
+			})
+		pointer = null
+		homtItems = null
+	})
+</script>
+
+<template>
+	<div class="home-wrapper">
+		<div class="pointer"></div>
+		<div class="home-item" v-for="item in itemList">
+			<div class="item-icon">
+				<img :src="item.icon" alt="" class="item-icon--inner" />
+			</div>
+			<p class="item-title">{{ item.title }}</p>
+		</div>
+	</div>
+</template>
+
+<style lang="scss" scoped>
+	.home-wrapper {
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		padding: 24px 12px;
+		// display: flex;
+		// justify-content: center;
+		// flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: repeat(5, minmax(166px, 1fr));
+		grid-auto-rows: 200px;
+		gap: 24px;
+		position: relative;
+		--iw: 160px;
+		--ih: 172px;
+		.home-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			.item-icon {
+				width: var(--iw);
+				height: var(--ih);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				&--inner {
+					width: calc(var(--iw) * 2 / 3);
+					height: calc(var(--ih) * 2 / 3);
+				}
+			}
+
+			.item-title {
+				font-family: 'Poppins', sans-serif;
+				font-size: 16px;
+			}
+		}
+
+		.pointer {
+			--l: 15px;
+			--d: 3px;
+			--g: 8px;
+			--w: 120px;
+			--h: 120px;
+			--x: 0;
+			--y: 0;
+			position: absolute;
+			width: calc(var(--w) + var(--g) * 2);
+			height: calc(var(--h) + var(--g) * 2);
+			left: 0;
+			top: 0;
+			transition: 0.3s;
+			display: none;
+			transform: translate3d(calc(var(--x) - var(--g)), calc(var(--y) - var(--g)), 0);
+			mask: conic-gradient(at var(--l) var(--l), transparent 75%, blue 75% 100%) 0 0 / calc(100% - var(--l))
+				calc(100% - var(--l)) repeat;
+			border: var(--d) solid var(--el-color-primary);
+		}
+	}
+</style>
