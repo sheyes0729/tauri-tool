@@ -4,6 +4,7 @@ import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 import pluginPrettierRecommendedConfigs from 'eslint-plugin-prettier/recommended'
 import parserVue from 'vue-eslint-parser'
+import aotuImport from './eslint-auto-import.cjs'
 
 export default [
 	{ files: ['**/*.{js,mjs,cjs,ts,vue}'] },
@@ -15,12 +16,14 @@ export default [
 	...pluginVue.configs['flat/essential'],
 	// prettier 默认推荐规则
 	pluginPrettierRecommendedConfigs,
+	// 全局变量
 	{
 		languageOptions: {
 			globals: {
 				...globals.browser,
 				...globals.es2020,
 				...globals.node,
+				...aotuImport.globals,
 			},
 			ecmaVersion: 2020,
 			parser: parserVue,

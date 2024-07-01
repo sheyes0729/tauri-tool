@@ -1,5 +1,4 @@
 <script setup lang="ts">
-	import { onMounted } from 'vue'
 	import { invoke } from '@tauri-apps/api'
 	import { appWindow, UserAttentionType } from '@tauri-apps/api/window'
 	import { setTheme } from './lib/utils/themeUtil'

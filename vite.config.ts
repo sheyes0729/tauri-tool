@@ -4,9 +4,30 @@ import path from 'path'
 import postcssPresetEnv from 'postcss-preset-env'
 import legacy from '@vitejs/plugin-legacy'
 import eslintPlugin from 'vite-plugin-eslint'
+import vueComponents from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import autoImport from 'unplugin-auto-import/vite'
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [vue(), legacy({}), eslintPlugin()],
+	plugins: [
+		vue(),
+		legacy({}),
+		eslintPlugin(),
+		autoImport({
+			imports: ['vue', 'vue-router', '@vueuse/core'],
+			resolvers: [ElementPlusResolver()],
+			dts: 'src/typings/auto-imports.d.ts',
+			eslintrc: {
+				enabled: false,
+			},
+		}),
+		vueComponents({
+			dts: 'src/typings/components.d.ts',
+			dirs: ['src/components'],
+			resolvers: [ElementPlusResolver()],
+			version: 3,
+		}),
+	],
 	clearScreen: false,
 	server: {
 		port: 1420,

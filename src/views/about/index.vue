@@ -8,4 +8,4 @@
 	<h1>about</h1>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="scss" scoped></style>
