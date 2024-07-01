@@ -1,6 +1,6 @@
-import { WebviewWindow, WindowOptions, appWindow, getAll } from '@tauri-apps/api/window'
-import { relaunch, exit } from '@tauri-apps/api/process'
-import { emit, listen } from '@tauri-apps/api/event'
+import { WebviewWindow, WindowOptions, getAll } from '@tauri-apps/api/window'
+// import { relaunch, exit } from '@tauri-apps/api/process'
+// import { emit, listen } from '@tauri-apps/api/event'
 
 interface WindowsOptions extends Partial<WindowOptions> {
 	label: string
@@ -25,6 +25,7 @@ export const defaultConfig: WindowsOptions = {
 
 export class Windows {
 	mainWin: WebviewWindow | null
+
 	constructor() {
 		this.mainWin = null
 	}
@@ -39,9 +40,11 @@ export class Windows {
 
 	// 创建新窗口
 	async createWin(options: WindowsOptions) {
+		console.log('create: ', options)
 		const args = Object.assign({}, defaultConfig, options)
 
 		// 判断窗口是否存在
+		console.log('existWin: ', WebviewWindow.getByLabel(args.label))
 		const existWin = getAll().find((w) => w.label == args.label)
 		if (existWin) {
 			if (existWin.label.indexOf('main') == -1) {
@@ -57,54 +60,54 @@ export class Windows {
 
 		// 是否最大化
 		if (args.maximized && args.resizable) {
-			win.maximize()
+			await win.maximize()
 		}
 
 		// 窗口创建完毕/失败
-		win.once('tauri://created', async () => {
+		await win.once('tauri://created', async () => {
 			console.log('window create success!')
 		})
 
-		win.once('tauri://error', async () => {
+		await win.once('tauri://error', async () => {
 			console.log('window create error!')
 		})
 	}
 
 	// 开启主进程监听事件
-	async listen() {
-		// 创建新窗体
-		await listen('win-create', (event) => {
-			console.log(event)
-			this.createWin(JSON.parse(event.payload as string))
-		})
-
-		// 显示窗体
-		await listen('win-show', async () => {
-			if (appWindow.label.indexOf('main') == -1) return
-			await appWindow.show()
-			await appWindow.unminimize()
-			await appWindow.setFocus()
-		})
-
-		// 隐藏窗体
-		await listen('win-hide', async () => {
-			if (appWindow.label.indexOf('main') == -1) return
-			await appWindow.hide()
-		})
-
-		// 退出应用
-		await listen('win-exit', async () => {
-			await exit()
-		})
-
-		// 重启应用
-		await listen('win-relaunch', async () => {
-			await relaunch()
-		})
-
-		// 主/渲染进程传参
-		await listen('win-setdata', async (event) => {
-			await emit('win-postdata', JSON.parse(event.payload as string))
-		})
-	}
+	// async listen() {
+	// 	// 创建新窗体
+	// 	await listen('win-create', (event) => {
+	// 		console.log(event)
+	// 		this.createWin(JSON.parse(event.payload as string))
+	// 	})
+	//
+	// 	// 显示窗体
+	// 	await listen('win-show', async () => {
+	// 		if (appWindow.label.indexOf('main') == -1) return
+	// 		await appWindow.show()
+	// 		await appWindow.unminimize()
+	// 		await appWindow.setFocus()
+	// 	})
+	//
+	// 	// 隐藏窗体
+	// 	await listen('win-hide', async () => {
+	// 		if (appWindow.label.indexOf('main') == -1) return
+	// 		await appWindow.hide()
+	// 	})
+	//
+	// 	// 退出应用
+	// 	await listen('win-exit', async () => {
+	// 		await exit()
+	// 	})
+	//
+	// 	// 重启应用
+	// 	await listen('win-relaunch', async () => {
+	// 		await relaunch()
+	// 	})
+	//
+	// 	// 主/渲染进程传参
+	// 	await listen('win-setdata', async (event) => {
+	// 		await emit('win-postdata', JSON.parse(event.payload as string))
+	// 	})
+	// }
 }

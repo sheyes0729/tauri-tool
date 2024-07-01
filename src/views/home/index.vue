@@ -10,8 +10,8 @@
 	export interface HomtItemInterface {
 		title: string
 		icon: string
-		url?: string
-		label?: string
+		url: string
+		label: string
 	}
 
 	const itemList: Array<HomtItemInterface> = [
@@ -134,24 +134,23 @@
 		if (!windows) {
 			windows = new Windows()
 		}
-		windows.createWin({
+		await windows.createWin({
 			label: options.label,
 			title: options.title,
 			url: options.url,
-			width: 500,
-			height: 500,
-			resizable: false,
+			width: 640,
+			height: 480,
+			resizable: true,
 			alwaysOnTop: false,
 		})
 	}
 
 	function onItemClick(item: HomtItemInterface) {
 		console.log('click: ', item)
-		if (!item.label || !item.url) return
 		createWindow({
-			label: item.label!,
-			url: item.url!,
-			title: item.title!,
+			label: item.label,
+			url: item.url,
+			title: item.title,
 		})
 	}
 </script>
