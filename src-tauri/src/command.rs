@@ -17,9 +17,9 @@ pub async fn close_splashscreen(window: tauri::Window) {
 // 创建托盘
 #[tauri::command]
 pub fn create_system_tray() -> SystemTray {
-    let restart = CustomMenuItem::new("restart", "重启应用");
+    let restart = CustomMenuItem::new("restart", "重启");
     let quit = CustomMenuItem::new("quit", "退出");
-    let hide_or_show = CustomMenuItem::new("hide", "隐藏/显示");
+    let hide_or_show = CustomMenuItem::new("hide", "隐藏");
     let open_devtools = CustomMenuItem::new("devtools", "打开devtools");
     let tray_menu;
     if cfg!(debug_assertions) {
@@ -61,11 +61,14 @@ pub fn tray_event(app: &AppHandle, event: SystemTrayEvent) {
             }
             "hide" => {
                 let visible = window.is_visible().unwrap();
+                let item_handle = app.tray_handle().get_item(&id);
                 if visible {
                     window.hide().unwrap();
+                    item_handle.set_title("显示").unwrap();
                 } else {
                     window.show().unwrap();
                     window.set_focus().unwrap();
+                    item_handle.set_title("隐藏").unwrap();
                 }
             }
             _ => {}

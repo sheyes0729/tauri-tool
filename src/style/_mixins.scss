@@ -16,14 +16,12 @@
   cursor: pointer;
 }
 
-$text-style:
-  left,
-  center,
-  right,
-  justify,
-  start,
-  end
-;
+$text-style: left,
+center,
+right,
+justify,
+start,
+end;
 
 @each $value in $text-style {
   .text-#{$value} {

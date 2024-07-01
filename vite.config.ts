@@ -7,6 +7,8 @@ import eslintPlugin from 'vite-plugin-eslint'
 import vueComponents from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import autoImport from 'unplugin-auto-import/vite'
+import pages from 'vite-plugin-pages'
+import layouts from 'vite-plugin-vue-meta-layouts'
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
@@ -27,6 +29,27 @@ export default defineConfig({
 			resolvers: [ElementPlusResolver()],
 			version: 3,
 		}),
+		pages({
+			dirs: [
+				{
+					dir: 'src/views',
+					baseRoute: '/',
+				},
+			],
+			exclude: ['**/components/**'],
+			routeBlockLang: 'json5',
+			importMode: () => 'sync',
+			extendRoute(route) {
+				if (route.path === '/') {
+					return {
+						...route,
+						redirect: '/home',
+					}
+				}
+				return route
+			},
+		}),
+		layouts(),
 	],
 	clearScreen: false,
 	server: {

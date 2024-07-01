@@ -2,6 +2,7 @@
 	import { getAssetsUrl } from '@/lib/utils/assetsUrl'
 	import { Windows } from '@/lib/utils/windows'
 	import { onBeforeUnmount, onMounted } from 'vue'
+
 	defineOptions({
 		name: 'HomeView',
 	})
@@ -21,6 +22,12 @@
 			icon: getAssetsUrl('img/excel-icon.png'),
 		},
 		{
+			title: 'PDF工具',
+			label: 'pdf',
+			url: '/#/pdf',
+			icon: getAssetsUrl('img/pdf-icon.png'),
+		},
+		{
 			title: 'Markdown编辑',
 			label: 'markdown',
 			url: '/#/markdown',
@@ -31,6 +38,36 @@
 			label: 'coordinates',
 			url: '/#/coordinate',
 			icon: getAssetsUrl('img/coordinates-icon.png'),
+		},
+		{
+			title: 'Iconfont图标预览',
+			label: 'IconFont',
+			url: '/#/iconfont',
+			icon: getAssetsUrl('img/iconfont-icon.svg'),
+		},
+		{
+			title: '图片处理',
+			label: 'image',
+			url: '/#/image',
+			icon: getAssetsUrl('img/image-icon.png'),
+		},
+		{
+			title: '文本比较',
+			label: 'text',
+			url: '/#/text',
+			icon: getAssetsUrl('img/text-icon.png'),
+		},
+		{
+			title: '代码混淆',
+			label: 'code',
+			url: '/#/code',
+			icon: getAssetsUrl('img/code-icon.png'),
+		},
+		{
+			title: '颜色工具',
+			label: 'color',
+			url: '/#/color',
+			icon: getAssetsUrl('img/color-icon.png'),
 		},
 		{
 			title: '关于',
@@ -135,11 +172,6 @@
 	.home-wrapper {
 		width: 100%;
 		height: 100%;
-		overflow: auto;
-		padding: 24px 12px;
-		// display: flex;
-		// justify-content: center;
-		// flex-wrap: wrap;
 		display: grid;
 		grid-template-columns: repeat(5, minmax(166px, 1fr));
 		grid-auto-rows: 200px;
@@ -147,12 +179,14 @@
 		position: relative;
 		--iw: 160px;
 		--ih: 160px;
+
 		.home-item {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 			gap: 6px;
+
 			.item-icon {
 				width: var(--iw);
 				height: var(--ih);
@@ -160,6 +194,7 @@
 				justify-content: center;
 				align-items: center;
 				cursor: pointer;
+
 				&--inner {
 					width: calc(var(--iw) * 2 / 3);
 					height: calc(var(--ih) * 2 / 3);
@@ -167,8 +202,7 @@
 			}
 
 			.item-title {
-				font-family: 'Poppins', sans-serif;
-				font-size: 16px;
+				font-size: var(--font-small);
 			}
 		}
 

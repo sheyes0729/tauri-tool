@@ -1,17 +1,23 @@
 :root {
   // 颜色
-  --color-bg: #ffffff;
+  --color-bg: #f7f7f7;
   --color-nav-hover: #f6f6f7;
+
   --color-primary: var(--el-color-primary);
+
   --color-title: darken(--color-title-active, 20%);
   --color-title-active: #373737;
   --color-subtitle: #9f9f9f;
   --color-text: #666666;
   --color-sub-text: #999999;
   --color-icon: #292929;
+
+  --color-header: #e5e6e7;
+
   --color-header-icon: #efefef;
   --color-icon-disable: var(--el-color-primary-light-3);
   --color-icon-bg: var(--el-color-primary-light-1);
+
   --color-border: #ddd;
   --color-mask: rgba(0,0,0,.3);
 

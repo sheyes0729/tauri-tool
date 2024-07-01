@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import localeZH from 'element-plus/es/locale/lang/zh-cn'
 	import { invoke } from '@tauri-apps/api'
 	import { appWindow, UserAttentionType } from '@tauri-apps/api/window'
 	import { setTheme } from './lib/utils/themeUtil'
@@ -18,7 +19,9 @@
 </script>
 
 <template>
-	<router-view />
+	<el-config-provider :locale="localeZH">
+		<router-view />
+	</el-config-provider>
 </template>
 
 <style scoped></style>
