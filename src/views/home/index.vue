@@ -9,23 +9,39 @@
 	export interface HomtItemInterface {
 		title: string
 		icon: string
+		url?: string
+		label?: string
 	}
 
 	const itemList: Array<HomtItemInterface> = [
 		{
 			title: '表格数据转换',
+			label: 'excel',
+			url: '/#/excel',
 			icon: getAssetsUrl('img/excel-icon.png'),
 		},
 		{
 			title: 'Markdown编辑',
+			label: 'markdown',
+			url: '/#/markdown',
 			icon: getAssetsUrl('img/markdown-icon.png'),
 		},
 		{
 			title: '坐标转换',
+			label: 'coordinates',
+			url: '/#/coordinate',
 			icon: getAssetsUrl('img/coordinates-icon.png'),
 		},
 		{
+			title: '关于',
+			label: 'about',
+			url: '/#/about',
+			icon: getAssetsUrl('img/about-icon.png'),
+		},
+		{
 			title: '设置',
+			label: 'settings',
+			url: '/#/settings',
 			icon: getAssetsUrl('img/settings-icon.png'),
 		},
 	]
@@ -69,11 +85,22 @@
 		homtItems = null
 	})
 
-	const createAboutWin = async () => {
-		new Windows().createWin({
-			label: 'About',
-			title: '关于',
-			url: '/#/about',
+	let windows: null | Windows = null
+
+	export interface createWindowOptions {
+		title: string
+		label: string
+		url: string
+	}
+
+	async function createWindow(options: createWindowOptions) {
+		if (!windows) {
+			windows = new Windows()
+		}
+		windows.createWin({
+			label: options.label,
+			title: options.title,
+			url: options.url,
 			width: 500,
 			height: 500,
 			resizable: false,
@@ -82,8 +109,13 @@
 	}
 
 	function onItemClick(item: HomtItemInterface) {
-		console.log(item)
-		createAboutWin()
+		console.log('click: ', item)
+		if (!item.label || !item.url) return
+		createWindow({
+			label: item.label!,
+			url: item.url!,
+			title: item.title!,
+		})
 	}
 </script>
 
@@ -114,7 +146,7 @@
 		gap: 24px;
 		position: relative;
 		--iw: 160px;
-		--ih: 172px;
+		--ih: 160px;
 		.home-item {
 			display: flex;
 			flex-direction: column;
