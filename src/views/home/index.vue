@@ -146,8 +146,7 @@
 		width: 100%;
 		height: 100%;
 		display: grid;
-		grid-template-columns: repeat(5, minmax(166px, 1fr));
-		grid-auto-rows: 200px;
+		grid-template-columns: repeat(auto-fill, minmax(166px, 1fr));
 		gap: 24px;
 		position: relative;
 		--iw: 160px;

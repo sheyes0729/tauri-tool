@@ -1,17 +1,20 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
+	import { ElMessage } from 'element-plus'
 
 	defineOptions({
 		name: 'IconView',
 	})
-	//@import url('https://at.alicdn.com/t/c/font_3931718_yx38s10w0hb.css');
 
-	const iconfontLink = ref<string>('https://at.alicdn.com/t/c/font_3931718_yx38s10w0hb.css')
+	const iconfontLink = ref<string>('')
 
 	const icons = ref<string[]>([])
 
 	async function getIcons() {
 		icons.value = []
+		if (!iconfontLink.value) return ElMessage.error('请输入iconfont css链接')
+		const linkRef = /^(https?:\/\/|\/\/)(.*)?\.css$/
+		if (!linkRef.test(iconfontLink.value)) return ElMessage.error('请输入正确的iconfont css链接')
 		const res = await fetch(iconfontLink.value)
 		const data = await res.text()
 		console.log(data)
@@ -25,10 +28,6 @@
 		console.log('result: ', icons.value)
 	}
 
-	// function insertOrRemoveLink(link) {
-	//   const links = document.querySelector('link')
-	// }
-
 	function getClassName(name: string) {
 		return `iconfont icon-${name}`
 	}
@@ -37,6 +36,7 @@
 <template>
 	<div class="iconfont-view">
 		<nav-bar title="iconfont预览" />
+		<link rel="stylesheet" :href="iconfontLink" v-if="iconfontLink" />
 		<div class="iconfont-input">
 			<el-space>
 				<el-input v-model="iconfontLink" placeholder="输入iconfont css链接" clearable />
@@ -64,10 +64,10 @@
 	}
 
 	.iconfont-content {
-		display: flex;
+		display: grid;
 		justify-content: space-around;
-		flex-wrap: wrap;
-		gap: 10px;
+		gap: var(--padding-small);
+		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 
 		.iconfont-item {
 			width: 160px;
