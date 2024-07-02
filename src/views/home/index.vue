@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 	import { getAssetsUrl } from '@/lib/utils/assetsUrl'
-	import { Windows } from '@/lib/utils/windows'
 	import { onBeforeUnmount, onMounted } from 'vue'
 
 	defineOptions({
@@ -18,67 +17,67 @@
 		{
 			title: '表格数据转换',
 			label: 'excel',
-			url: '/#/excel',
+			url: '/excel',
 			icon: getAssetsUrl('img/excel-icon.png'),
 		},
 		{
 			title: 'PDF工具',
 			label: 'pdf',
-			url: '/#/pdf',
+			url: '/pdf',
 			icon: getAssetsUrl('img/pdf-icon.png'),
 		},
 		{
 			title: 'Markdown编辑',
 			label: 'markdown',
-			url: '/#/markdown',
+			url: '/markdown',
 			icon: getAssetsUrl('img/markdown-icon.png'),
 		},
 		{
 			title: '坐标转换',
 			label: 'coordinates',
-			url: '/#/coordinate',
+			url: '/coordinate',
 			icon: getAssetsUrl('img/coordinates-icon.png'),
 		},
 		{
 			title: 'Iconfont图标预览',
 			label: 'IconFont',
-			url: '/#/iconfont',
+			url: '/iconfont',
 			icon: getAssetsUrl('img/iconfont-icon.svg'),
 		},
 		{
 			title: '图片处理',
 			label: 'image',
-			url: '/#/image',
+			url: '/image',
 			icon: getAssetsUrl('img/image-icon.png'),
 		},
 		{
 			title: '文本比较',
 			label: 'text',
-			url: '/#/text',
+			url: '/text',
 			icon: getAssetsUrl('img/text-icon.png'),
 		},
 		{
 			title: '代码混淆',
 			label: 'code',
-			url: '/#/code',
+			url: '/code',
 			icon: getAssetsUrl('img/code-icon.png'),
 		},
 		{
 			title: '颜色工具',
 			label: 'color',
-			url: '/#/color',
+			url: '/color',
 			icon: getAssetsUrl('img/color-icon.png'),
 		},
 		{
 			title: '关于',
 			label: 'about',
-			url: '/#/about',
+			url: '/about',
 			icon: getAssetsUrl('img/about-icon.png'),
 		},
 		{
 			title: '设置',
 			label: 'settings',
-			url: '/#/settings',
+			url: '/settings',
 			icon: getAssetsUrl('img/settings-icon.png'),
 		},
 	]
@@ -122,36 +121,11 @@
 		homtItems = null
 	})
 
-	let windows: null | Windows = null
-
-	export interface createWindowOptions {
-		title: string
-		label: string
-		url: string
-	}
-
-	async function createWindow(options: createWindowOptions) {
-		if (!windows) {
-			windows = new Windows()
-		}
-		await windows.createWin({
-			label: options.label,
-			title: options.title,
-			url: options.url,
-			width: 640,
-			height: 480,
-			resizable: true,
-			alwaysOnTop: false,
-		})
-	}
+	const router = useRouter()
 
 	function onItemClick(item: HomtItemInterface) {
 		console.log('click: ', item)
-		createWindow({
-			label: item.label,
-			url: item.url,
-			title: item.title,
-		})
+		router.push(item.url)
 	}
 </script>
 

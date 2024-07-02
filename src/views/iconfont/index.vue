@@ -24,6 +24,7 @@
 </script>
 
 <template>
+	<nav-bar title="iconfont预览" />
 	<div class="iconfont-view">
 		<div class="iconfont-item" v-for="item in icons" :key="item">
 			<i :class="getClassName(item)"></i>

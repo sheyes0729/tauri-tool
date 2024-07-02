@@ -7,11 +7,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ElButton: typeof import('element-plus/es')['ElButton']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
-    ElPopover: typeof import('element-plus/es')['ElPopover']
+    ElEmpty: typeof import('element-plus/es')['ElEmpty']
+    ElPageHeader: typeof import('element-plus/es')['ElPageHeader']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     MdiIcon: typeof import('./../components/mdi-icon/index.vue')['default']
+    NavBar: typeof import('./../components/nav-bar/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

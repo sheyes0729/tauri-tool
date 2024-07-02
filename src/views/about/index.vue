@@ -5,7 +5,10 @@
 </script>
 
 <template>
-	<h1>about</h1>
+	<div class="about-view">
+		<nav-bar title="关于" />
+		<h1>about</h1>
+	</div>
 </template>
 
 <style lang="scss" scoped></style>
