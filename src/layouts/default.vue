@@ -4,14 +4,31 @@
 	defineOptions({
 		name: 'DefaultLayout',
 	})
+
+	const defaultLayoutContent = shallowRef<HTMLElement>()
+
+	const { y } = useScroll(defaultLayoutContent)
+
+	function backToTop() {
+		defaultLayoutContent.value?.scroll({
+			behavior: 'smooth',
+			top: 0,
+			left: 0,
+		})
+	}
 </script>
 
 <template>
 	<div class="default-layout">
 		<default-layout-header />
-		<section class="default-layout-content">
+		<section class="default-layout-content" ref="defaultLayoutContent">
 			<router-view />
 		</section>
+		<div class="back-to-top" v-if="y >= 460">
+			<el-button type="primary" size="large" circle @click="backToTop">
+				<mdi-icon name="arrow_drop_up" />
+			</el-button>
+		</div>
 	</div>
 </template>
 
@@ -27,6 +44,12 @@
 			flex: 1;
 			overflow: auto;
 			padding: var(--padding-small);
+		}
+
+		.back-to-top {
+			position: fixed;
+			right: 40px;
+			bottom: 40px;
 		}
 	}
 </style>

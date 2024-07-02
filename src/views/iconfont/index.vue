@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
-	import { ElMessage } from 'element-plus'
+	import { ElMessage, ElNotification } from 'element-plus'
 
 	defineOptions({
 		name: 'IconView',
@@ -17,7 +17,6 @@
 		if (!linkRef.test(iconfontLink.value)) return ElMessage.error('请输入正确的iconfont css链接')
 		const res = await fetch(iconfontLink.value)
 		const data = await res.text()
-		console.log(data)
 		const reg = /\.icon-(\w*):before/g
 		const result = data.match(reg)
 		if (!result) return
@@ -25,11 +24,22 @@
 			const res = ele.match(/\.icon-(\w*):before/)?.[1]
 			res && icons.value.push(res)
 		})
-		console.log('result: ', icons.value)
 	}
 
 	function getClassName(name: string) {
 		return `iconfont icon-${name}`
+	}
+
+	const { copy } = useClipboard({ legacy: true })
+
+	function onCopy(text: string) {
+		copy(text)
+			.then(() => {
+				ElNotification.success('复制成功！')
+			})
+			.catch((e) => {
+				ElNotification.error(e.message)
+			})
 	}
 </script>
 
@@ -47,7 +57,7 @@
 			</el-space>
 		</div>
 		<div class="iconfont-content m-t-8" v-if="icons.length">
-			<div class="iconfont-item" v-for="item in icons" :key="item">
+			<div class="iconfont-item" v-for="item in icons" :key="item" @click="onCopy(item)">
 				<i :class="getClassName(item)"></i>
 				<div class="name text-ellipsis">{{ item }}</div>
 			</div>
@@ -72,6 +82,7 @@
 		.iconfont-item {
 			width: 160px;
 			height: 160px;
+			position: relative;
 
 			display: flex;
 			flex-direction: column;
@@ -80,10 +91,24 @@
 			justify-content: center;
 			background-color: #ffffff;
 			border-radius: var(--radius-default);
+			overflow: hidden;
 			cursor: pointer;
 
 			&:hover {
 				box-shadow: 0 0 8px var(--color-border);
+
+				&::before {
+					content: '复制';
+					display: grid;
+					place-content: center;
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: inherit;
+					height: inherit;
+					background-color: inherit;
+					color: var(--color-primary);
+				}
 			}
 
 			.name {
