@@ -35,6 +35,7 @@ export default [
 	{
 		rules: {
 			'vue/require-v-for-key': 'off',
+			'@typescript-eslint/no-unused-vars': 'warn',
 		},
 	},
 ]
