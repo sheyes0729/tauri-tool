@@ -3,13 +3,16 @@
 	import { invoke } from '@tauri-apps/api'
 	import { appWindow, UserAttentionType } from '@tauri-apps/api/window'
 	import { setTheme } from './lib/utils/themeUtil'
+
 	onMounted(() => {
-		const primaryColor = localStorage.primaryColor || '#ec4141'
+		const primaryColor = localStorage.primaryColor || '#008c63'
 		setTheme(primaryColor)
 
-		document.addEventListener('contextmenu', (e) => {
-			e.preventDefault()
-		})
+		if (!process.env.TAURI_DEBUG) {
+			document.addEventListener('contextmenu', (e) => {
+				e.preventDefault()
+			})
+		}
 		setTimeout(async () => {
 			// close splashscreen
 			await invoke('close_splashscreen')

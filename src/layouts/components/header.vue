@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { appWindow, getCurrent } from '@tauri-apps/api/window'
+	import { getCurrent } from '@tauri-apps/api/window'
 
 	const title = ref<string>('')
 
@@ -14,6 +14,7 @@
 	}
 
 	function operation(ty: OperationEnum) {
+		const appWindow = getCurrent()
 		switch (ty) {
 			case OperationEnum.CLOSE:
 				appWindow.hide()
@@ -62,7 +63,14 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		background-color: var(--color-header);
+		//background-color: var(--color-header);
+		background: linear-gradient(
+				to left,
+				var(--el-color-primary-light-9) 0%,
+				var(--el-color-primary-light-7) 50%,
+				var(--el-color-primary-light-5) 100%
+			)
+			0 0 / 100% 100% no-repeat;
 
 		&-label {
 			display: flex;
@@ -74,7 +82,7 @@
 				width: var(--s);
 				height: var(--s);
 				border-radius: 50%;
-				background-color: darken(#f5f6f7, 20%);
+				background-color: var(--color-primary);
 			}
 
 			.title {
