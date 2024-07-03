@@ -40,8 +40,8 @@
 		emitPath: false,
 	}
 
-	// 106.51193629413287, 29.64724693110072
-	const inputArea = ref<string>('106.51193629413287, 29.64724693110072')
+	// 测试用例：106.51193629413287, 29.64724693110072
+	const inputArea = ref<string>('')
 	const outputArea = ref<string>('')
 
 	const activeName = ref<string>('first')
