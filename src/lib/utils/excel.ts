@@ -1,4 +1,4 @@
-import xlsx from 'xlsx'
+import { read, writeFile, utils, WorkSheet } from 'xlsx'
 
 export interface ReadFileResult {
 	name: string
@@ -10,29 +10,18 @@ export class ExcelUtil {
 	 * 读取Excel文件
 	 * @param file
 	 */
-	static readFile(file: File): Promise<Array<ReadFileResult> | null> {
-		return new Promise((resolve) => {
-			const reader = new FileReader()
-			reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
-				const data = e.target?.result
-				if (!data) resolve(null)
-				const wb = xlsx.read(data, {
-					cellDates: true,
-				})
-				resolve(
-					wb.SheetNames.map((name, index) => {
-						return {
-							name,
-							data: xlsx.utils.sheet_to_json(wb.Sheets[wb.SheetNames[index]], {
-								defval: '',
-								raw: true,
-							}),
-						}
-					}),
-				)
-			})
-
-			reader.readAsArrayBuffer(file)
+	static readFile(file: Uint8Array): Array<ReadFileResult> {
+		const wb = read(file, {
+			cellDates: true,
+		})
+		return wb.SheetNames.map((name, index) => {
+			return {
+				name,
+				data: utils.sheet_to_json(wb.Sheets[wb.SheetNames[index]], {
+					defval: '',
+					raw: true,
+				}),
+			}
 		})
 	}
 
@@ -43,11 +32,11 @@ export class ExcelUtil {
 	 */
 	static writeFile(fileName: string, list: Array<ReadFileResult>) {
 		const sheetNames: string[] = []
-		const sheets: Record<string, xlsx.WorkSheet> = {}
+		const sheets: Record<string, WorkSheet> = {}
 
 		for (const item of list) {
 			const { name, data } = item
-			const jsonWorkSheet = xlsx.utils.json_to_sheet(data)
+			const jsonWorkSheet = utils.json_to_sheet(data)
 			sheetNames.push(name)
 			sheets[name] = jsonWorkSheet
 		}
@@ -56,6 +45,6 @@ export class ExcelUtil {
 			SheetNames: sheetNames,
 			Sheets: sheets,
 		}
-		xlsx.writeFile(workBook, fileName)
+		writeFile(workBook, fileName)
 	}
 }
