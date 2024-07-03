@@ -6,13 +6,12 @@ const EE = 0.00669342162296594323
 export class CoordinateTransformer {
 	/**
 	 * BD-09 To GCJ-02
-	 * @param lng
-	 * @param lat
+	 * @param coord
 	 * @constructor
 	 */
-	static BD09ToGCJ02(lng: number, lat: number): [number, number] {
-		const x = +lng - 0.0065
-		const y = +lat - 0.006
+	static BD09ToGCJ02(coord: number[]): number[] {
+		const x = coord[0] - 0.0065
+		const y = coord[1] - 0.006
 		const z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * BD_FACTOR)
 		const theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * BD_FACTOR)
 		const gg_lng = z * Math.cos(theta)
@@ -22,13 +21,12 @@ export class CoordinateTransformer {
 
 	/**
 	 * GCJ-02 To BD-09
-	 * @param lng
-	 * @param lat
+	 * @param coord
 	 * @constructor
 	 */
-	static GCJ02ToBD09(lng: number, lat: number): [number, number] {
-		lat = +lat
-		lng = +lng
+	static GCJ02ToBD09(coord: number[]): number[] {
+		const lat = coord[0]
+		const lng = coord[1]
 		const z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * BD_FACTOR)
 		const theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * BD_FACTOR)
 		const bd_lng = z * Math.cos(theta) + 0.0065
@@ -38,13 +36,12 @@ export class CoordinateTransformer {
 
 	/**
 	 * WGS-84 To GCJ-02
-	 * @param lng
-	 * @param lat
+	 * @param coord
 	 * @constructor
 	 */
-	WGS84ToGCJ02(lng: number, lat: number): [number, number] {
-		lat = +lat
-		lng = +lng
+	static WGS84ToGCJ02(coord: number[]): number[] {
+		const lat = coord[0]
+		const lng = coord[1]
 		if (out_of_china(lng, lat)) {
 			return [lng, lat]
 		} else {
@@ -55,13 +52,12 @@ export class CoordinateTransformer {
 
 	/**
 	 * GCJ-02 To WGS-84
-	 * @param lng
-	 * @param lat
+	 * @param coord
 	 * @constructor
 	 */
-	GCJ02ToWGS84(lng: number, lat: number): [number, number] {
-		lat = +lat
-		lng = +lng
+	static GCJ02ToWGS84(coord: number[]): number[] {
+		const lat = coord[0]
+		const lng = coord[1]
 		if (out_of_china(lng, lat)) {
 			return [lng, lat]
 		} else {

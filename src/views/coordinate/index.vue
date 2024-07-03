@@ -1,7 +1,9 @@
 <script setup lang="ts">
 	import { coordinate, CoordinateItemInterface } from '@/lib/constant/coordinates'
-	import { ElLoading, ElMessage } from 'element-plus'
+	import { CascaderProps, ElLoading, ElMessage } from 'element-plus'
 	import proj4 from 'proj4'
+	import { open } from '@tauri-apps/api/shell'
+	import { CoordinateTransformer } from '@/lib/utils/coordinateTransformer'
 
 	defineOptions({
 		name: 'CoordinateView',
@@ -9,15 +11,15 @@
 
 	const selectList: Array<{ label: string; value: number }> = [
 		{
-			label: 'WGS84',
+			label: 'WGS84 - 国际通用',
 			value: 0,
 		},
 		{
-			label: 'GCJ02',
+			label: 'GCJ02 - 高德、QQ地图',
 			value: 1,
 		},
 		{
-			label: 'BD09',
+			label: 'BD09 - 百度地图',
 			value: 2,
 		},
 	]
@@ -29,15 +31,17 @@
 
 	const selectOptions = coordinate
 
-	const allOptions: Array<CoordinateItemInterface> = coordinate.map((e) => e.list).flat(1)
+	const allOptions: Array<CoordinateItemInterface> = coordinate.map((e) => e.list).flat(2)
 
-	const cascaderProps = {
+	const cascaderProps: CascaderProps = {
 		value: 'code',
 		label: 'remark',
 		children: 'list',
+		emitPath: false,
 	}
 
-	const inputArea = ref<string>('')
+	// 106.51193629413287, 29.64724693110072
+	const inputArea = ref<string>('106.51193629413287, 29.64724693110072')
 	const outputArea = ref<string>('')
 
 	const activeName = ref<string>('first')
@@ -53,20 +57,40 @@
 	}
 
 	function transferCoord() {
-		console.log('inputArea.value: ', inputArea.value.split(/\n/))
-		outputArea.value = inputArea.value.split(/\n/).join('\n')
-		console.log('outputArea.value: ', outputArea.value)
 		if (!inputArea.value.trim()) return ElMessage.warning('请先输入坐标！')
 		const loadingInstance = ElLoading.service({
 			text: '转换中...',
 		})
 		try {
-			const coordArr = inputArea.value.split(/\n/).map((e) => e.split(','))
+			const coordArr = inputArea.value.split(/\n/).map((e) => e.split(',').map((e) => parseFloat(e)))
 			if (activeName.value === 'first') {
 				if (inputType.value === outputType.value) {
 					outputArea.value = inputArea.value
 					return
 				}
+				const arr = []
+				for (const coord of coordArr) {
+					if (inputType.value === 0) {
+						if (outputType.value === 1) {
+							arr.push(CoordinateTransformer.WGS84ToGCJ02(coord))
+						} else {
+							arr.push(CoordinateTransformer.GCJ02ToBD09(CoordinateTransformer.WGS84ToGCJ02(coord)))
+						}
+					} else if (inputType.value === 1) {
+						if (outputType.value === 0) {
+							arr.push(CoordinateTransformer.GCJ02ToWGS84(coord))
+						} else {
+							arr.push(CoordinateTransformer.GCJ02ToBD09(coord))
+						}
+					} else {
+						if (outputType.value === 1) {
+							arr.push(CoordinateTransformer.BD09ToGCJ02(coord))
+						} else {
+							arr.push(CoordinateTransformer.GCJ02ToWGS84(CoordinateTransformer.BD09ToGCJ02(coord)))
+						}
+					}
+				}
+				outputArea.value = arr.map((e) => e.join(',')).join('\n')
 			} else {
 				if (inputCoordinate.value === outputCoordinate.value) {
 					outputArea.value = inputArea.value
@@ -86,6 +110,10 @@
 		} finally {
 			loadingInstance.close()
 		}
+	}
+
+	function openUrl(url: string) {
+		open(url)
 	}
 </script>
 
@@ -113,13 +141,38 @@
 				<el-tab-pane label="投影坐标转换" name="second">
 					<el-form inline>
 						<el-form-item label="输入坐标系">
-							<el-cascader v-model="inputCoordinate" :options="selectOptions" :props="cascaderProps" />
+							<el-cascader
+								v-model="inputCoordinate"
+								:show-all-levels="false"
+								:options="selectOptions"
+								:props="cascaderProps"
+							>
+								<template #default="{ node, data }">
+									<span>{{ data.remark }}</span>
+									<span v-if="node.isLeaf"> (EPSG:{{ data.code }}) </span>
+								</template>
+							</el-cascader>
 						</el-form-item>
 
 						<el-form-item label="输出坐标系">
-							<el-cascader v-model="outputCoordinate" :options="selectOptions" :props="cascaderProps" />
+							<el-cascader
+								v-model="outputCoordinate"
+								:show-all-levels="false"
+								:options="selectOptions"
+								:props="cascaderProps"
+							>
+								<template #default="{ node, data }">
+									<span>{{ data.remark }}</span>
+									<span v-if="node.isLeaf"> (EPSG:{{ data.code }}) </span>
+								</template>
+							</el-cascader>
 						</el-form-item>
 					</el-form>
+
+					<div class="tips">
+						<span> ESPG详细信息查看： </span>
+						<strong @click="openUrl('https://epsg.io/?q=')">https://epsg.io/?q=</strong>
+					</div>
 				</el-tab-pane>
 			</el-tabs>
 
@@ -156,5 +209,23 @@
 		width: 100%;
 		height: 100%;
 		padding: 0 var(--padding-default) var(--padding-default);
+	}
+
+	.tips {
+		margin-bottom: 8px;
+		color: var(--el-color-danger);
+		font-size: var(--font-small);
+
+		span {
+			font-size: inherit;
+		}
+
+		strong {
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 </style>
