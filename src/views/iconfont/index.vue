@@ -47,9 +47,9 @@
 	<div class="iconfont-view">
 		<nav-bar title="iconfont预览" />
 		<link rel="stylesheet" :href="iconfontLink" v-if="iconfontLink" />
-		<div class="iconfont-input">
+		<div class="iconfont-input m-t-8 m-b-8">
 			<el-space>
-				<el-input v-model="iconfontLink" placeholder="输入iconfont css链接" clearable />
+				<el-input v-model="iconfontLink" placeholder="输入iconfont css链接" clearable style="width: 20vw" />
 				<el-button type="primary" @click="getIcons">
 					<mdi-icon name="remove_red_eye" class="m-r-8" />
 					<span> 预览 </span>
@@ -68,11 +68,6 @@
 </template>
 
 <style scoped>
-	.iconfont-input {
-		display: flex;
-		justify-content: flex-end;
-	}
-
 	.iconfont-content {
 		display: grid;
 		justify-content: space-around;

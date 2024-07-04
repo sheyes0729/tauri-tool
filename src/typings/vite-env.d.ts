@@ -9,7 +9,7 @@ declare module '*.vue' {
 }
 
 /**
- * 由于 vite-plugin-eslint 库有点落后，导致 vite 高版本不能正确的识别 cjs 模块
+ * 由于 vite-plugins-eslint 库有点落后，导致 vite 高版本不能正确的识别 cjs 模块
  * 所以这里手动定义
  */
 declare module 'vite-plugin-eslint' {
