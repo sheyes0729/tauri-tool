@@ -67,6 +67,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.14.9
     version: 20.14.9
+  '@types/proj4':
+    specifier: ^2.5.5
+    version: 2.5.5
   '@vitejs/plugin-legacy':
     specifier: ^5.4.1
     version: 5.4.1(terser@5.31.1)(vite@5.3.2)
@@ -2484,6 +2487,10 @@ packages:
     resolution: {integrity: sha512-06OCtnTXtWOZBJlRApleWndH4JsRVs1pDCc8dLSQp+7PpUpX3ePdHyeNSFTeSe7FtKyQkrlPvHwJOW3SLd8Oyg==}
     dependencies:
       undici-types: 5.26.5
+    dev: true
+
+  /@types/proj4@2.5.5:
+    resolution: {integrity: sha512-y4tHUVVoMEOm2nxRLQ2/ET8upj/pBmoutGxFw2LZJTQWPgWXI+cbxVEUFFmIzr/bpFR83hGDOTSXX6HBeObvZA==}
     dev: true
 
   /@types/web-bluetooth@0.0.16:

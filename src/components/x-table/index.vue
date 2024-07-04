@@ -65,7 +65,7 @@
 				<vxe-column v-bind="column">
 					<template #default="scope" v-if="!column.type">
 						<slot v-if="column.slot" :name="column.slot" v-bind="scope"></slot>
-						<span v-else>{{ get(scope.row, column.field) }}</span>
+						<span v-else>{{ get(scope.row, column.field!) }}</span>
 					</template>
 				</vxe-column>
 			</template>

@@ -14,12 +14,12 @@
 	}
 
 	const itemList: Array<HomtItemInterface> = [
-		{
-			title: '表格数据转换',
-			label: 'excel',
-			url: '/excel',
-			icon: getAssetsUrl('img/excel-icon.png'),
-		},
+		// {
+		// 	title: '表格数据转换',
+		// 	label: 'excel',
+		// 	url: '/excel',
+		// 	icon: getAssetsUrl('img/excel-icon.png'),
+		// },
 		{
 			title: 'PDF工具',
 			label: 'pdf',

@@ -67,6 +67,24 @@ export class CoordinateTransformer {
 			return [lng * 2 - mgLng, lat * 2 - mgLat]
 		}
 	}
+
+	/**
+	 * WGS-84 To BD-09
+	 * @param coord
+	 * @constructor
+	 */
+	static WGS84ToBD09(coord: number[]): number[] {
+		return CoordinateTransformer.GCJ02ToBD09(CoordinateTransformer.WGS84ToGCJ02(coord))
+	}
+
+	/**
+	 * BD-09 To WGS-84
+	 * @param coord
+	 * @constructor
+	 */
+	static BD09ToWGS84(coord: number[]): number[] {
+		return CoordinateTransformer.GCJ02ToWGS84(CoordinateTransformer.BD09ToGCJ02(coord))
+	}
 }
 
 function out_of_china(lng: number, lat: number): boolean {

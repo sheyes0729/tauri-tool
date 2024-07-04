@@ -31,6 +31,8 @@
 		console.log(htmlStr)
 		textContent.value!.innerHTML = htmlStr
 	}
+
+	onMounted(compare)
 </script>
 
 <template>

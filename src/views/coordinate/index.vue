@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { coordinate, CoordinateItemInterface } from '@/lib/constant/coordinates'
-	import { CascaderProps, ElLoading, ElMessage } from 'element-plus'
-	import proj4 from 'proj4'
+	import { CascaderProps, ElLoading, ElMessage, TabPaneName } from 'element-plus'
+	import * as proj4 from 'proj4'
 	import { open } from '@tauri-apps/api/shell'
 	import { CoordinateTransformer } from '@/lib/utils/coordinateTransformer'
 
@@ -29,7 +29,7 @@
 	const inputType = ref<number>(0)
 	const outputType = ref<number>(0)
 
-	const selectOptions = coordinate
+	const selectOptions = coordinate as never
 
 	const allOptions: Array<CoordinateItemInterface> = coordinate.map((e) => e.list).flat(2)
 
@@ -46,7 +46,7 @@
 
 	const activeName = ref<string>('first')
 
-	function onTabChange(tab: string) {
+	function onTabChange(tab: TabPaneName) {
 		console.log('tab: ', tab)
 		clear()
 	}
@@ -74,7 +74,7 @@
 						if (outputType.value === 1) {
 							arr.push(CoordinateTransformer.WGS84ToGCJ02(coord))
 						} else {
-							arr.push(CoordinateTransformer.GCJ02ToBD09(CoordinateTransformer.WGS84ToGCJ02(coord)))
+							arr.push(CoordinateTransformer.WGS84ToBD09(coord))
 						}
 					} else if (inputType.value === 1) {
 						if (outputType.value === 0) {
@@ -86,7 +86,7 @@
 						if (outputType.value === 1) {
 							arr.push(CoordinateTransformer.BD09ToGCJ02(coord))
 						} else {
-							arr.push(CoordinateTransformer.GCJ02ToWGS84(CoordinateTransformer.BD09ToGCJ02(coord)))
+							arr.push(CoordinateTransformer.BD09ToWGS84(coord))
 						}
 					}
 				}
@@ -100,7 +100,7 @@
 				const outputOption = allOptions.find((e) => e.code === outputCoordinate.value)
 				const arr = []
 				for (const coord of coordArr) {
-					arr.push(proj4(inputOption?.defs, outputOption?.defs, coord))
+					arr.push(proj4(inputOption!.defs, outputOption!.defs, coord))
 				}
 				outputArea.value = arr.map((e) => e.join(',')).join('\n')
 			}

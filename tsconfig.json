@@ -29,11 +29,13 @@
     },
     "types": [
       // 编译过程中被包含进来的类型声明文件
-      "vite/client"
+      "vite/client",
+      "vite-plugin-pages/client",
+      "vite-plugin-vue-meta-layouts/client"
     ],
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
-      "node_modules/@types",
+      "node_modules/@types"
     ]
   },
   "include": [
